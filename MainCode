@@ -1,3 +1,24 @@
+--[[
+ ______   __         __     ______   ______        __         __     ______     ______     ______     ______     __  __    
+/\  ___\ /\ \       /\ \   /\  == \ /\  ___\      /\ \       /\ \   /\  == \   /\  == \   /\  __ \   /\  == \   /\ \_\ \   
+\ \  __\ \ \ \____  \ \ \  \ \  _-/ \ \___  \     \ \ \____  \ \ \  \ \  __<   \ \  __<   \ \  __ \  \ \  __<   \ \____ \  
+ \ \_\    \ \_____\  \ \_\  \ \_\    \/\_____\     \ \_____\  \ \_\  \ \_____\  \ \_\ \_\  \ \_\ \_\  \ \_\ \_\  \/\_____\ 
+  \/_/     \/_____/   \/_/   \/_/     \/_____/      \/_____/   \/_/   \/_____/   \/_/ /_/   \/_/\/_/   \/_/ /_/   \/_____/ 
+                                                                                                        
+made by flip ofc lol
+
+.sSSSSs.                                                       SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS 
+SSSSSSSSSs. .sSSSs.  SSSSS       SSSSS .sSSSSs.    .sSSS SSSSS S SSS S SSS S SSS S SSS S SSS S SSS S SSS S SSS 
+S SSS SSSS' S SSS SS SSSSS       S SSS S SSSSSSSs. S SSS SSSSS S  SS S  SS S  SS S  SS S  SS S  SS S  SS S  SS 
+S  SS       S  SS  `sSSSSS       S  SS S  SS SSSSS S  SS SSSSS S;;;S S;;;S S;;;S S;;;S S;;;S S;;;S S;;;S S;;;S 
+S..SSsss    S..SS    SSSSS       S..SS S..SS SSSSS `..SSsSSSS' S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S 
+S:::SSSS    S:::S    SSSSS       S:::S S:::S SSSSS    S:::S    SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS 
+S;;;S       S;;;S    SSSSS       S;;;S S;;;S SSSSS    S;;;S    .sSs. .sSs. .sSs. .sSs. .sSs. .sSs. .sSs. .sSs. 
+S%%%S SSSSS S%%%S    SSSSS SSSSS S%%%S S%%%S SSSSS    S%%%S    S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S 
+SSSSSsSS;:' SSSSS    SSSSS `:;SSsSSSSS SSSSSsSSSSS    SSSSS    `:;:' `:;:' `:;:' `:;:' `:;:' `:;:' `:;:' `:;:' 
+                                                                                                               
+]]
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -267,7 +288,7 @@ function Library:Init(options)
 		
 		if TweeningDrag then TweeningDrag:Cancel() end
 
-		TweeningDrag = TweenService:Create(GUI["2"], TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+		TweeningDrag = TweenService:Create(GUI["2"], TweenInfo.new(0.35, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {
 			Position = newPos
 		})
 		TweeningDrag:Play()
