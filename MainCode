@@ -26,6 +26,11 @@ function Library.validate(defaults,options)
 end
 
 function Library:Init(options)
+	
+	local dragging = false
+	local dragStart, startPos
+	local TweeningDrag
+	
 	options = Library.validate({
 		name = "UI library"
 	},options or {})
@@ -250,6 +255,43 @@ function Library:Init(options)
 		GUI["39"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["39"]["Name"] = [[BlueFrame]];
 	end
+	
+	local function update(input)
+		local delta = input.Position - dragStart
+		local newPos = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+		
+		if TweeningDrag then TweeningDrag:Cancel() end
+
+		TweeningDrag = TweenService:Create(GUI["2"], TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+			Position = newPos
+		})
+		TweeningDrag:Play()
+	end
+	
+	GUI["2"].InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = GUI["2"].Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			update(input)
+		end
+	end)
 	
 	function GUI:CreateTab(options)
 		options = Library.validate({
