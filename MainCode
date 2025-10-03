@@ -1,0 +1,566 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Coregui = game:GetService("CoreGui")
+
+--vars
+local viewport = game:GetService("Workspace").CurrentCamera.ViewportSize
+local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+
+local Library = {}
+
+function Library:tween(object, goal, callback)
+	local tween = TweenService:Create(object, tweenInfo, goal)
+	tween.Completed:Connect(callback or function() end)
+	tween:Play()
+end
+
+function Library.validate(defaults,options)
+	for i,v in pairs(defaults) do
+		if options[i] == nil then
+			options[i] = v
+		end
+	end
+	return options
+end
+
+function Library:Init(options)
+	options = Library.validate({
+		name = "UI library"
+	},options or {})
+	
+	local GUI = {
+		CurrentTab = nil
+	}
+	
+	--Main frame
+	do
+		GUI["1"] = Instance.new("ScreenGui", RunService:IsStudio() and Players.LocalPlayer:WaitForChild("PlayerGui") or Coregui);
+		GUI["1"]["IgnoreGuiInset"] = true;
+		GUI["1"]["DisplayOrder"] = 999999999;
+		GUI["1"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
+		GUI["1"]["Name"] = options["name"]..[[Library]];
+		GUI["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+
+
+		-- StarterGui.MyLibrary.Main
+		GUI["2"] = Instance.new("Frame", GUI["1"]);
+		GUI["2"]["ZIndex"] = 2;
+		GUI["2"]["BorderSizePixel"] = 0;
+		GUI["2"]["BackgroundColor3"] = Color3.fromRGB(25, 25, 25);
+		GUI["2"]["AnchorPoint"] = Vector2.new(0, 0);
+		GUI["2"]["Size"] = UDim2.new(0.44307, 0, 0.54443, 0);
+		GUI["2"]["Position"] = UDim2.new(0.278, 0,0.227, 0);
+		GUI["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["2"]["Name"] = [[Main]];
+
+
+		-- StarterGui.MyLibrary.Main.MainCorner
+		GUI["3"] = Instance.new("UICorner", GUI["2"]);
+		GUI["3"]["Name"] = [[MainCorner]];
+		GUI["3"]["CornerRadius"] = UDim.new(0.025, 0);
+
+
+		-- StarterGui.MyLibrary.Main.Title
+		GUI["4"] = Instance.new("TextLabel", GUI["2"]);
+		GUI["4"]["TextWrapped"] = true;
+		GUI["4"]["BorderSizePixel"] = 0;
+		GUI["4"]["TextSize"] = 15;
+		GUI["4"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+		GUI["4"]["TextScaled"] = true;
+		GUI["4"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		GUI["4"]["FontFace"] = Font.new([[rbxassetid://12187371840]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+		GUI["4"]["TextColor3"] = Color3.fromRGB(208, 208, 208);
+		GUI["4"]["BackgroundTransparency"] = 1;
+		GUI["4"]["Size"] = UDim2.new(0.96963, 0, 0.05396, 0);
+		GUI["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["4"]["Text"] = options["name"];
+		GUI["4"]["Name"] = [[Title]];
+		GUI["4"]["Position"] = UDim2.new(0.01302, 0, 0.01974, 0);
+
+
+		-- StarterGui.MyLibrary.Main.Title.UITextSizeConstraint
+		GUI["5"] = Instance.new("UITextSizeConstraint", GUI["4"]);
+		GUI["5"]["MaxTextSize"] = 15;
+	end
+	
+	-- Navigation
+	do
+		-- StarterGui.MyLibrary.Main.Navigation
+		GUI["6"] = Instance.new("Frame", GUI["2"]);
+		GUI["6"]["BorderSizePixel"] = 0;
+		GUI["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		GUI["6"]["Size"] = UDim2.new(0.25807, 0, 0.89847, 0);
+		GUI["6"]["Position"] = UDim2.new(0.01302, 0, 0.08769, 0);
+		GUI["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["6"]["Name"] = [[Navigation]];
+		GUI["6"]["BackgroundTransparency"] = 1;
+
+
+		-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder
+		GUI["7"] = Instance.new("ScrollingFrame", GUI["6"]);
+		GUI["7"]["Active"] = true;
+		GUI["7"]["BorderSizePixel"] = 0;
+		GUI["7"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		GUI["7"]["Name"] = [[ButtonHolder]];
+		GUI["7"]["Size"] = UDim2.new(1, 0, 1, 0);
+		GUI["7"]["ScrollBarImageColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["7"]["ScrollBarThickness"] = 0;
+		GUI["7"]["BackgroundTransparency"] = 1;
+
+
+		-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.UIListLayout
+		GUI["8"] = Instance.new("UIListLayout", GUI["7"]);
+		GUI["8"]["Padding"] = UDim.new(0.017, 0);
+		GUI["8"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+		
+		-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.UIPadding
+		GUI["10"] = Instance.new("UIPadding", GUI["7"]);
+		GUI["10"]["PaddingTop"] = UDim.new(0.0035, 0);
+		GUI["10"]["PaddingLeft"] = UDim.new(0.03, 0);
+	end
+	
+	--BlueTRANSITION
+	
+	do
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab
+		GUI["2d"] = Instance.new("Frame", GUI["2"]);
+		GUI["2d"]["ZIndex"] = 3;
+		GUI["2d"]["BorderSizePixel"] = 0;
+		GUI["2d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		GUI["2d"]["Size"] = UDim2.new(0.70273, 0, 0.89218, 0);
+		GUI["2d"]["Position"] = UDim2.new(0.27992, 0, 0.09398, 0);
+		GUI["2d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["2d"]["Name"] = [[BlueTransitionToTab]];
+		GUI["2d"]["BackgroundTransparency"] = 1;
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["2e"] = Instance.new("Frame", GUI["2d"]);
+		GUI["2e"]["BorderSizePixel"] = 0;
+		GUI["2e"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["2e"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["2e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["2e"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.UIListLayout
+		GUI["2f"] = Instance.new("UIListLayout", GUI["2d"]);
+		GUI["2f"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["30"] = Instance.new("Frame", GUI["2d"]);
+		GUI["30"]["BorderSizePixel"] = 0;
+		GUI["30"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["30"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["30"]["Position"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["30"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["30"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["31"] = Instance.new("Frame", GUI["2d"]);
+		GUI["31"]["BorderSizePixel"] = 0;
+		GUI["31"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["31"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["31"]["Position"] = UDim2.new(0, 0, 0.18182, 0);
+		GUI["31"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["31"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["32"] = Instance.new("Frame", GUI["2d"]);
+		GUI["32"]["BorderSizePixel"] = 0;
+		GUI["32"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["32"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["32"]["Position"] = UDim2.new(0, 0, 0.27273, 0);
+		GUI["32"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["32"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["33"] = Instance.new("Frame", GUI["2d"]);
+		GUI["33"]["BorderSizePixel"] = 0;
+		GUI["33"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["33"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["33"]["Position"] = UDim2.new(0, 0, 0.36364, 0);
+		GUI["33"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["33"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["34"] = Instance.new("Frame", GUI["2d"]);
+		GUI["34"]["BorderSizePixel"] = 0;
+		GUI["34"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["34"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["34"]["Position"] = UDim2.new(0, 0, 0.45455, 0);
+		GUI["34"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["34"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["35"] = Instance.new("Frame", GUI["2d"]);
+		GUI["35"]["BorderSizePixel"] = 0;
+		GUI["35"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["35"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["35"]["Position"] = UDim2.new(0, 0, 0.54545, 0);
+		GUI["35"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["35"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["36"] = Instance.new("Frame", GUI["2d"]);
+		GUI["36"]["BorderSizePixel"] = 0;
+		GUI["36"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["36"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["36"]["Position"] = UDim2.new(0, 0, 0.63636, 0);
+		GUI["36"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["36"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["37"] = Instance.new("Frame", GUI["2d"]);
+		GUI["37"]["BorderSizePixel"] = 0;
+		GUI["37"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["37"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["37"]["Position"] = UDim2.new(0, 0, 0.72727, 0);
+		GUI["37"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["37"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["38"] = Instance.new("Frame", GUI["2d"]);
+		GUI["38"]["BorderSizePixel"] = 0;
+		GUI["38"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["38"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["38"]["Position"] = UDim2.new(0, 0, 0.81818, 0);
+		GUI["38"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["38"]["Name"] = [[BlueFrame]];
+
+
+		-- StarterGui.MyLibrary.Main.BlueTransitionToTab.BlueFrame
+		GUI["39"] = Instance.new("Frame", GUI["2d"]);
+		GUI["39"]["BorderSizePixel"] = 0;
+		GUI["39"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+		GUI["39"]["Size"] = UDim2.new(0, 0, 0.09091, 0);
+		GUI["39"]["Position"] = UDim2.new(0, 0, 0.90909, 0);
+		GUI["39"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		GUI["39"]["Name"] = [[BlueFrame]];
+	end
+	
+	function GUI:CreateTab(options)
+		options = Library.validate({
+			name = "Preview Tab"
+		},options or {})
+		
+		local tab = {
+			Hover = false,
+			Active = false,
+		}
+		
+		--Render
+		do
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab
+			tab["9"] = Instance.new("Frame", GUI["7"]);
+			tab["9"]["BorderSizePixel"] = 0;
+			tab["9"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			tab["9"]["Size"] = UDim2.new(0.947, 0, 0.035, 0);
+			tab["9"]["Position"] = UDim2.new(-0, 0, 0.00351, 0);
+			tab["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["9"]["Name"] = options["name"].. "Tab";
+			tab["9"]["BackgroundTransparency"] = 1;
+
+
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.UICorner
+			tab["a"] = Instance.new("UICorner", tab["9"]);
+			tab["a"]["CornerRadius"] = UDim.new(0.27, 0);
+
+
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.Toggle
+			tab["b"] = Instance.new("TextButton", tab["9"]);
+			tab["b"]["BorderSizePixel"] = 0;
+			tab["b"]["TextSize"] = 14;
+			tab["b"]["TextColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["b"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			tab["b"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			tab["b"]["ZIndex"] = 4;
+			tab["b"]["BackgroundTransparency"] = 1;
+			tab["b"]["Size"] = UDim2.new(1, 0, 1, 0);
+			tab["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["b"]["Text"] = [[ ]];
+			tab["b"]["Name"] = [[Toggle]];
+
+
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.TabName
+			tab["c"] = Instance.new("TextLabel", tab["9"]);
+			tab["c"]["TextWrapped"] = true;
+			tab["c"]["BorderSizePixel"] = 0;
+			tab["c"]["TextSize"] = 16;
+			tab["c"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+			tab["c"]["TextScaled"] = true;
+			tab["c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			tab["c"]["FontFace"] = Font.new([[rbxassetid://12187371840]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			tab["c"]["TextColor3"] = Color3.fromRGB(209, 209, 209);
+			tab["c"]["BackgroundTransparency"] = 1;
+			tab["c"]["Size"] = UDim2.new(0, 146, 0, 27);
+			tab["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["c"]["Text"] = options["name"];
+			tab["c"]["Name"] = options["name"].. "Tab";
+			tab["c"]["Position"] = UDim2.new(0.0435, 0, -0, 0);
+
+
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.TabName.UITextSizeConstraint
+			tab["d"] = Instance.new("UITextSizeConstraint", tab["c"]);
+			tab["d"]["MaxTextSize"] = 16;
+
+
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.BlueTransition
+			tab["e"] = Instance.new("Frame", tab["9"]);
+			tab["e"]["Visible"] = false;
+			tab["e"]["ZIndex"] = 0;
+			tab["e"]["BorderSizePixel"] = 0;
+			tab["e"]["BackgroundColor3"] = Color3.fromRGB(0, 151, 255);
+			tab["e"]["AnchorPoint"] = Vector2.new(0, 0.5);
+			tab["e"]["Size"] = UDim2.new(0.91, 0, 0.6, 0);
+			tab["e"]["Position"] = UDim2.new(0.044, 0,0.53, 0);
+			tab["e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["e"]["Name"] = [[BlueTransition]];
+
+
+			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.UIStroke
+			tab["f"] = Instance.new("UIStroke", tab["9"]);
+			tab["f"]["Transparency"] = 1;
+			tab["f"]["Thickness"] = 1.5;
+			tab["f"]["Color"] = Color3.fromRGB(0, 151, 255);
+			
+			-- Startertab.MyLibrary.Main.ContentContainer
+			tab["11"] = Instance.new("Frame", GUI["2"]);
+			tab["11"]["BorderSizePixel"] = 0;
+			tab["11"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			tab["11"]["Size"] = UDim2.new(0.70273, 0, 0.89218, 0);
+			tab["11"]["Position"] = UDim2.new(0.27992, 0, 0.09398, 0);
+			tab["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["11"]["Name"] = [[ContentContainer]];
+			tab["11"]["BackgroundTransparency"] = 1;
+
+
+			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab
+			tab["12"] = Instance.new("Frame", tab["11"]);
+			tab["12"]["BorderSizePixel"] = 0;
+			tab["12"]["BackgroundColor3"] = Color3.fromRGB(29, 29, 29);
+			tab["12"]["Size"] = UDim2.new(1, 0, 1, 0);
+			tab["12"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["12"]["Name"] = options["name"].."Tab";
+			tab["12"]["Visible"] = false;
+
+
+			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content
+			tab["13"] = Instance.new("ScrollingFrame", tab["12"]);
+			tab["13"]["Active"] = true;
+			tab["13"]["BorderSizePixel"] = 0;
+			tab["13"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			tab["13"]["Name"] = [[Content]];
+			tab["13"]["ScrollBarImageTransparency"] = 1;
+			tab["13"]["Size"] = UDim2.new(1, 0, 1, 0);
+			tab["13"]["ScrollBarImageColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["13"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["13"]["ScrollBarThickness"] = 0;
+			tab["13"]["BackgroundTransparency"] = 1;
+
+
+			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content.TabTitle
+			tab["14"] = Instance.new("TextLabel", tab["13"]);
+			tab["14"]["TextWrapped"] = true;
+			tab["14"]["BorderSizePixel"] = 0;
+			tab["14"]["TextSize"] = 15;
+			tab["14"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+			tab["14"]["TextScaled"] = true;
+			tab["14"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			tab["14"]["FontFace"] = Font.new([[rbxassetid://12187371840]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			tab["14"]["TextColor3"] = Color3.fromRGB(203, 203, 203);
+			tab["14"]["BackgroundTransparency"] = 1;
+			tab["14"]["Size"] = UDim2.new(0.9, 0, 0.025, 0);
+			tab["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			tab["14"]["Text"] = options["name"];
+			tab["14"]["Name"] = options["name"].."Title";
+			tab["14"]["Position"] = UDim2.new(0, 0, 0.0101, 0);
+
+
+			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content.TabTitle.UITextSizeConstraint
+			tab["15"] = Instance.new("UITextSizeConstraint", tab["14"]);
+			tab["15"]["MaxTextSize"] = 15;
+
+
+			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content.UIListLayout
+			tab["16"] = Instance.new("UIListLayout", tab["13"]);
+			tab["16"]["Padding"] = UDim.new(0.009, 0);
+			tab["16"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content.UIPadding
+			tab["17"] = Instance.new("UIPadding", tab["13"]);
+			tab["17"]["PaddingTop"] = UDim.new(0.01, 0);
+			tab["17"]["PaddingLeft"] = UDim.new(0.015, 0);
+
+		end
+		
+		--Methods
+		
+		function tab:Activate()
+			if tab.Active == false then
+				if GUI.CurrentTab ~= nil then
+					GUI.CurrentTab:Deactivate()
+				end
+				
+				task.spawn(function()
+					for i, v in pairs(GUI["2d"]:GetChildren()) do
+						if v:IsA("Frame") then
+							if v.Name == "BlueFrame" then
+								Library:tween(v,{Size = UDim2.new(1,0,0.09091,0)})
+								task.wait(0.04)
+							end
+						end
+					end
+					task.wait(0.04)
+					for i, v in pairs(GUI["2d"]:GetChildren()) do
+						if v:IsA("Frame") then
+							if v.Name == "BlueFrame" then
+								Library:tween(v,{Size = UDim2.new(0,0,0.09091,0)})
+								task.wait(0.04)
+							end
+						end
+					end
+				end)
+				
+				tab.Active = true
+				tab["e"].Size = UDim2.new(0, 0, 0.3, 0)
+				tab["e"].Visible = true
+				tab["12"].Visible = true
+				Library:tween(tab["e"], {Size = UDim2.new(0.5, 0, 0.6, 0)})
+				Library:tween(tab["f"], {Transparency = 0})
+				GUI.CurrentTab = tab
+			end
+		end
+		
+		function tab:Deactivate()
+			if tab.Active == true then
+				tab.Active = false
+				tab.Hover = false
+				Library:tween(tab["e"], {Size = UDim2.new(0, 0, 0.3, 0)}, function()
+					tab["e"].Visible = false
+				end)
+				tab["12"].Visible = false
+				Library:tween(tab["f"], {Transparency = 1})
+			end
+		end
+		
+
+		do
+			tab["b"].MouseEnter:Connect(function()
+				tab.Hover = true
+			end)
+
+			tab["b"].MouseLeave:Connect(function()
+				tab.Hover = false
+			end)
+
+			tab["b"].MouseButton1Click:Connect(function()
+				if tab.Hover then
+					tab:Activate()
+				end
+			end)
+		end
+		
+		--if GUI.CurrentTab == nil then
+			--tab:Activate()
+		--end
+		
+		function tab:Button(options)
+			options = Library.validate({
+				name = "Click me!",
+				callback = function() end
+			},options or {})
+
+			local button = {
+				hover = false,
+				mousedown = false,
+			}
+			
+			do
+				-- Starterbutton.MyLibrary.Main.ContentContainer.HomeTab.Content.Button
+				button["18"] = Instance.new("CanvasGroup", tab["13"]);
+				button["18"]["BorderSizePixel"] = 0;
+				button["18"]["BackgroundColor3"] = Color3.fromRGB(27, 26, 28);
+				button["18"]["Size"] = UDim2.new(0.987, 0, 0.045, 0);
+				button["18"]["Position"] = UDim2.new(0.06598, 0, 0.08639, 0);
+				button["18"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+				button["18"]["Name"] = [[Button]];
+
+
+				-- Starterbutton.MyLibrary.Main.ContentContainer.HomeTab.Content.Button.Stroke
+				button["19"] = Instance.new("UIStroke", button["18"]);
+				button["19"]["Name"] = [[Stroke]];
+				button["19"]["Thickness"] = 1.8;
+				button["19"]["Color"] = Color3.fromRGB(39, 37, 40);
+
+
+				-- Starterbutton.MyLibrary.Main.ContentContainer.HomeTab.Content.Button.UICorner
+				button["1a"] = Instance.new("UICorner", button["18"]);
+				button["1a"]["CornerRadius"] = UDim.new(0.2, 0);
+
+
+				-- Starterbutton.MyLibrary.Main.ContentContainer.HomeTab.Content.Button.Toggle
+				button["1b"] = Instance.new("TextButton", button["18"]);
+				button["1b"]["TextWrapped"] = true;
+				button["1b"]["BorderSizePixel"] = 0;
+				button["1b"]["TextSize"] = 14;
+				button["1b"]["TextScaled"] = true;
+				button["1b"]["TextColor3"] = Color3.fromRGB(209, 209, 209);
+				button["1b"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+				button["1b"]["FontFace"] = Font.new([[rbxassetid://12187371840]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+				button["1b"]["BackgroundTransparency"] = 1;
+				button["1b"]["Size"] = UDim2.new(1, 0, 1, 0);
+				button["1b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+				button["1b"]["Text"] = [[Click Me!]];
+				button["1b"]["Name"] = [[Toggle]];
+
+
+				-- Starterbutton.MyLibrary.Main.ContentContainer.HomeTab.Content.Button.Toggle.TextSizeConstraint
+				button["1c"] = Instance.new("UITextSizeConstraint", button["1b"]);
+				button["1c"]["Name"] = [[TextSizeConstraint]];
+				button["1c"]["MaxTextSize"] = 14;
+			end
+			
+			do
+				button["1b"].MouseEnter:Connect(function()
+					button.hover = true
+					
+					Library:tween(button["19"], {Color = Color3.fromRGB(47, 45, 48)})
+				end)
+				
+				button["1b"].MouseLeave:Connect(function()
+					button.hover = false
+
+					Library:tween(button["19"], {Color = Color3.fromRGB(39, 37, 40)}) --27, 26, 28
+				end)
+				
+				button["1b"].MouseButton1Click:Connect(function()
+					button["18"]["BackgroundColor3"] = Color3.fromRGB(32, 30, 33)
+					Library:tween(button["18"], {BackgroundColor3 = Color3.fromRGB(27, 26, 28)})
+					pcall(options.callback)
+				end)
+			end
+			
+			return button
+		end
+		
+		return tab
+	end
+	
+	return GUI
+end
+
+return Library
