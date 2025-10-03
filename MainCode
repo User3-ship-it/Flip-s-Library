@@ -368,7 +368,7 @@ function Library:Init(options)
 			tab["c"]["FontFace"] = Font.new([[rbxassetid://12187371840]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
 			tab["c"]["TextColor3"] = Color3.fromRGB(209, 209, 209);
 			tab["c"]["BackgroundTransparency"] = 1;
-			tab["c"]["Size"] = UDim2.new(0, 146, 0, 27);
+			tab["c"]["Size"] = UDim2.new(0, 146, 0, 31);
 			tab["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 			tab["c"]["Text"] = options["name"];
 			tab["c"]["Name"] = options["name"].. "Tab";
