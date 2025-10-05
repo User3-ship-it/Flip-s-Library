@@ -1,4 +1,4 @@
-# Flip's lib
+# Flip's UI lib
 
 This is basically just a simple but good UI library for roblox, this is still work in proggress and doesnt have too many elements yet but i will add more stuff soon.
 
