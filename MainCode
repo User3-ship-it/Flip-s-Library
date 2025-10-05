@@ -7,16 +7,6 @@
                                                                                                         
 made by flip ofc lol
 
-.sSSSSs.                                                       SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS 
-SSSSSSSSSs. .sSSSs.  SSSSS       SSSSS .sSSSSs.    .sSSS SSSSS S SSS S SSS S SSS S SSS S SSS S SSS S SSS S SSS 
-S SSS SSSS' S SSS SS SSSSS       S SSS S SSSSSSSs. S SSS SSSSS S  SS S  SS S  SS S  SS S  SS S  SS S  SS S  SS 
-S  SS       S  SS  `sSSSSS       S  SS S  SS SSSSS S  SS SSSSS S;;;S S;;;S S;;;S S;;;S S;;;S S;;;S S;;;S S;;;S 
-S..SSsss    S..SS    SSSSS       S..SS S..SS SSSSS `..SSsSSSS' S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S 
-S:::SSSS    S:::S    SSSSS       S:::S S:::S SSSSS    S:::S    SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS SSSSS 
-S;;;S       S;;;S    SSSSS       S;;;S S;;;S SSSSS    S;;;S    .sSs. .sSs. .sSs. .sSs. .sSs. .sSs. .sSs. .sSs. 
-S%%%S SSSSS S%%%S    SSSSS SSSSS S%%%S S%%%S SSSSS    S%%%S    S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S S%%%S 
-SSSSSsSS;:' SSSSS    SSSSS `:;SSsSSSSS SSSSSsSSSSS    SSSSS    `:;:' `:;:' `:;:' `:;:' `:;:' `:;:' `:;:' `:;:' 
-
  d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
 88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
 88      88    88    88            odD'      88      88    88 88ooo88 
@@ -383,11 +373,11 @@ function Library:Init(options)
 			tab["c"]["FontFace"] = Font.new([[rbxassetid://12187371840]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
 			tab["c"]["TextColor3"] = Color3.fromRGB(209, 209, 209);
 			tab["c"]["BackgroundTransparency"] = 1;
-			tab["c"]["Size"] = UDim2.new(0, 146, 0, 31);
+			tab["c"]["Size"] = UDim2.new(0.945, 0,1, 0);
 			tab["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 			tab["c"]["Text"] = options["name"];
 			tab["c"]["Name"] = options["name"].. "Tab";
-			tab["c"]["Position"] = UDim2.new(0.0435, 0, -0, 0);
+			tab["c"]["Position"] = UDim2.new(0.055, 0,0, 0);
 
 
 			-- StarterGui.MyLibrary.Main.Navigation.ButtonHolder.HomeTab.TabName.UITextSizeConstraint
@@ -468,8 +458,8 @@ function Library:Init(options)
 
 
 			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content.TabTitle.UITextSizeConstraint
-			tab["15"] = Instance.new("UITextSizeConstraint", tab["14"]);
-			tab["15"]["MaxTextSize"] = 15;
+			--tab["15"] = Instance.new("UITextSizeConstraint", tab["14"]);
+			--tab["15"]["MaxTextSize"] = 15;
 
 
 			-- Startertab.MyLibrary.Main.ContentContainer.HomeTab.Content.UIListLayout
