@@ -50,7 +50,7 @@ local button = tab:Button({
 })
 ```
 
-Theres not much elements for now, since i didnt have alot of time to finish this, but i will soon update the code to add more elements like toggles, dropdowns, etc.
+Theres not much elements for now, since i didnt have alot of time to finish this, but i will soon update the code to add more elements like toggles, dropdowns, you name it.
 
 ## License
 
